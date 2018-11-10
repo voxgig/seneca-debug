@@ -1,5 +1,5 @@
 # seneca-debug
-[Seneca](senecajs.org) plugin debugging Seneca-based systems.
+[Seneca](senecajs.org) plugin for debugging Seneca-based systems.
 
 [![Npm][BadgeNpm]][Npm]
 [![Travis][BadgeTravis]][Travis]

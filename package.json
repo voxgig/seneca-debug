@@ -31,17 +31,18 @@
     "node": ">=8"
   },
   "dependencies": {
-    "optioner": "3.0"
+    "optioner": "3.0",
+    "seneca-promisify": "^0.4.0"
   },
   "devDependencies": {
-    "jsonic": "0.3.1",
     "code": "5",
     "coveralls": "3",
+    "jsonic": "0.3.1",
     "lab": "17",
     "prettier": "1",
     "seneca": "github:senecajs/seneca",
-    "seneca-joi": "2",
     "seneca-entity": "2",
+    "seneca-joi": "2",
     "seneca-plugin-validator": "0"
   }
 }

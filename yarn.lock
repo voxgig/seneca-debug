@@ -1402,6 +1402,13 @@ seneca-plugin-validator@0:
   dependencies:
     code "^4.1.0"
 
+seneca-promisify@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/seneca-promisify/-/seneca-promisify-0.4.0.tgz#3f32fa5ba2824e72ef41807635ccda7ae4ed89cf"
+  integrity sha512-mOUjvUBl7NhYcQ7QMehf/5pxseuhwynBz074Ra8imTjfvuJEputPo7hGAVPLvAryxjZsutyYBJZF7f01P/IsXA==
+  dependencies:
+    optioner "3.0"
+
 seneca-transport@2.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/seneca-transport/-/seneca-transport-2.3.0.tgz#f392ad66b927cb32e695df161332abb11b4d7410"

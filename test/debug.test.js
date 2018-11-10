@@ -20,7 +20,31 @@ lab.test('validate', Util.promisify(function(x,fin){PluginValidator(Plugin, modu
 
 
 lab.test('happy', async () => {
-  var si = seneca_instance()
+  const si = seneca_instance()
+  si
+    .message('a:1', async function(msg) {
+      return {x:msg.x}
+    })
+    .message('b:1', async function(msg) {
+      const a1 = await this.post('a:1,x:2')
+      return {x:a1.x,y:msg.y}
+    })
+    .message('c:1', async function(msg) {
+      throw new Error('C1')
+    })
+  
+  const out = await si.post('b:1,y:3')
+  expect(out).equal({x:2,y:3})
+
+  try {
+    await si.post('c:1')
+  }
+  catch(e) {}
+  
+  const debug = si.export('debug')
+
+  //console.dir(debug,{depth:null})
+  console.log(debug.print())
 })
 
 
@@ -28,6 +52,7 @@ lab.test('happy', async () => {
 function seneca_instance(fin, testmode) {
   return Seneca()
     .test(fin, testmode)
+    .use('promisify')
     .use(Plugin)
     .use('seneca-joi')
     .use('entity')
