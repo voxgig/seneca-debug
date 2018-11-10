@@ -906,7 +906,7 @@ json-stringify-safe@5.0, json-stringify-safe@5.x.x, json-stringify-safe@^5.0.1, 
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
-jsonic@0.3, jsonic@0.3.1:
+jsonic@0.3:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/jsonic/-/jsonic-0.3.1.tgz#da306185dc635b649ad934e3f6826188cad73bdb"
   integrity sha512-5Md4EK3vPAMvP2sXY6M3/vQEPeX3LxEQBJuF979uypddXjsUlEoAI9/Nojh8tbw+YU5FjMoqSElO6oyjrAuprw==
@@ -1402,7 +1402,7 @@ seneca-plugin-validator@0:
   dependencies:
     code "^4.1.0"
 
-seneca-promisify@^0.4.0:
+seneca-promisify@0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/seneca-promisify/-/seneca-promisify-0.4.0.tgz#3f32fa5ba2824e72ef41807635ccda7ae4ed89cf"
   integrity sha512-mOUjvUBl7NhYcQ7QMehf/5pxseuhwynBz074Ra8imTjfvuJEputPo7hGAVPLvAryxjZsutyYBJZF7f01P/IsXA==
