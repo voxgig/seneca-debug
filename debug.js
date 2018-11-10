@@ -4,6 +4,9 @@
 
 const Util = require('util')
 
+const Hapi = require('hapi')
+const Inert = require('inert')
+const Nes = require('nes')
 
 var Errors = require('./lib/errors')
 
@@ -11,12 +14,21 @@ var Errors = require('./lib/errors')
 
 module.exports = debug
 
-debug.defaults = {}
+debug.defaults = {
+  hapi: {
+    port: 8899,
+    host: 'localhost'
+  },
+  wspath: '/debug'
+}
+
 debug.errors = {}
 
-debug.preload = function preload_debug() {
+debug.preload = function preload_debug(plugin) {
+
   intern.error = Errors(this)
   intern.clean = this.util.clean
+
   
   this.inward(function(ctxt, data) {
     const meta = data.meta
@@ -32,6 +44,11 @@ debug.preload = function preload_debug() {
 
     parent_trace.children.push(trace_node)
     intern.map[meta.id] = trace_node
+
+    if(intern.hapi_ready) {
+      //console.log('IN',intern.wspath, data)
+      intern.hapi.publish(intern.wspath, data)
+    }
   })
 
   this.outward(function(ctxt, data) {
@@ -42,12 +59,57 @@ debug.preload = function preload_debug() {
     if(trace_node) {
       trace_node.res = data.res
       trace_node.err = data.err
+
+      if(intern.hapi_ready) {
+        //console.log('OUT',intern.wspath, data)
+        intern.hapi.publish(intern.wspath, data)
+      }
     }
   })
 
 }
 
 function debug(options) {
+
+  this.prepare(async function() {
+    var seneca = this
+    
+    console.log(options)
+
+    intern.hapi = new Hapi.Server(options.hapi)
+
+    await intern.hapi.register(Inert)
+    await intern.hapi.register(Nes)
+
+    intern.hapi.subscription(options.wspath)
+
+    intern.hapi.route({
+      method: 'GET',
+      path: '/{param*}',
+      handler: {
+        directory: {
+          path: __dirname+'/dist',
+          index: true,
+        }
+      }
+    })
+
+    intern.hapi.route({
+      method: 'GET',
+      path: '/test',
+      handler: async function(req,h) {
+        return await seneca.post('b:1,y:3')
+      }
+    })
+    
+    await intern.hapi.start()
+
+    console.log('HAPI',intern.hapi.info)
+    
+    intern.hapi_ready = true
+    intern.wspath = options.wspath
+  })
+
   return {
     export: {
       trace: intern.trace,
@@ -65,6 +127,7 @@ const intern = debug.intern = {
     }
   },
   map: {},
+  hapi_ready: false,
   print: function() {
     function walk(trace, depth, buf) {
       buf.push(intern.spaces.substring(0,depth*2)+trace.meta.pattern+
