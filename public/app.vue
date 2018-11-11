@@ -4,7 +4,12 @@
 <script src="./app.js"></script>
 
 <style>
-.example {
-  color: red;
+.container {
+   padding: 0 !important;
+   margin: 0 !important;
+   max-width: 100vw !important;
+}
+.selected-msg > div.v-treeview-node__root {
+  border: 1px solid green;
 }
 </style>

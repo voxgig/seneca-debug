@@ -24,9 +24,27 @@ export default {
 
   methods: {
     opened: function(nodes) {
+      //console.log(nodes.toString())
+      
       const last = nodes[nodes.length-1]
       if(last) {
+        const msgtree = this.$refs.msgtree
+        const prev = this.selected
+                
         this.selected = msgmap[last]
+
+        if(this.selected) {
+          if(prev) {
+            const prevnode = msgtree.nodes[prev.id]
+            if(prevnode) {
+              prevnode.isActive = false
+              if(prevnode.vnode) { prevnode.vnode.isActive = false }
+            }
+          }
+
+          msgtree.nodes[this.selected.id].isActive = true
+          msgtree.nodes[this.selected.id].vnode.isActive = true
+        }
       }
     },
     addmsg: function(data) {

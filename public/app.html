@@ -12,11 +12,11 @@
           >
           <v-flex xs5>
             <v-treeview
+              ref="msgtree"
               :active.sync="active"
               :open.sync="open"
               :items="items"
-              activatable
-              active-class="primary--text"
+              active-class="selected-msg"
               class="grey lighten-5"
               open-on-click
               transition
@@ -27,18 +27,17 @@
           <v-flex
             d-flex
             >
-            <v-scroll-y-transition mode="out-in">
               <v-card
                 v-if="selected"
                 :key="selected.id"
                 class="pt-4 mx-auto"
                 flat
-                max-width="400"
+                max-width="50vw"
+                max-height="100vh"
+                style="overflow:scroll"
                 >
                 <v-card-text>
-                  <h3 class="headline mb-2">
-                    {{ selected.name }}
-                  </h3>
+                  <h3 class="headline mb-2">{{ selected.name }}</h3>
                   <vue-json-pretty
                     :deep="1"
                     :data="selected.data.msg"
@@ -49,9 +48,7 @@
                 <v-divider></v-divider>
 
                 <v-card-text>
-                  <h4 class="headline mb-2">
-                    result
-                  </h4>
+                  <h4 class="headline mb-2">result</h4>
                   <vue-json-pretty
                     :deep="1"
                     :data="selected.data.res || selected.data.err"
@@ -61,9 +58,7 @@
 
                 <v-divider></v-divider>
                 <v-card-text>
-                  <h4 class="headline mb-2">
-                    meta
-                  </h4>
+                  <h4 class="headline mb-2">meta</h4>
 
                   <vue-json-pretty
                     :deep="1"
@@ -73,7 +68,7 @@
                 </v-card-text>
 
               </v-card>
-            </v-scroll-y-transition>
+
           </v-flex>
         </v-layout>
       </v-container>
