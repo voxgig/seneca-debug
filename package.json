@@ -1,6 +1,6 @@
 {
   "name": "@seneca/debug",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Seneca plugin for debugging Seneca-based systems.",
   "main": "debug.js",
   "scripts": {
