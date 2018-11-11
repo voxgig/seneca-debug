@@ -1,6 +1,6 @@
 {
   "name": "@seneca/debug",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Seneca plugin for debugging Seneca-based systems.",
   "main": "debug.js",
   "scripts": {
@@ -26,7 +26,8 @@
     "LICENSE",
     "README.md",
     "debug.js",
-    "lib/errors.js"
+    "lib/errors.js",
+    "dist"
   ],
   "engines": {
     "node": ">=8"
