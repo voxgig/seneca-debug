@@ -31,6 +31,10 @@ debug.preload = function preload_debug(plugin) {
 
   
   this.inward(function(ctxt, data) {
+    data.debug_kind = 'in'
+
+    // TODO: should be able to turn this off
+
     const meta = data.meta
     const parent = meta.parents[0] ? meta.parents[0][1] : null
 
@@ -46,12 +50,13 @@ debug.preload = function preload_debug(plugin) {
     intern.map[meta.id] = trace_node
 
     if(intern.hapi_ready) {
-      //console.log('IN',intern.wspath, data)
       intern.hapi.publish(intern.wspath, data)
     }
   })
 
   this.outward(function(ctxt, data) {
+    data.debug_kind = 'out'
+    
     const trace_node = intern.map[data.meta.id]
 
     // NOTE: some outward events are virtual from default$ directives
@@ -61,7 +66,6 @@ debug.preload = function preload_debug(plugin) {
       trace_node.err = data.err
 
       if(intern.hapi_ready) {
-        //console.log('OUT',intern.wspath, data)
         intern.hapi.publish(intern.wspath, data)
       }
     }
@@ -71,11 +75,12 @@ debug.preload = function preload_debug(plugin) {
 
 function debug(options) {
 
+  // TODO: options seem polluted?
+  // console.log(options)
+  
   this.prepare(async function() {
     var seneca = this
     
-    console.log(options)
-
     intern.hapi = new Hapi.Server(options.hapi)
 
     await intern.hapi.register(Inert)
@@ -104,8 +109,6 @@ function debug(options) {
     
     await intern.hapi.start()
 
-    console.log('HAPI',intern.hapi.info)
-    
     intern.hapi_ready = true
     intern.wspath = options.wspath
   })

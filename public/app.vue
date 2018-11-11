@@ -1,23 +1,7 @@
-<template>
-  <div class="example">
-    {{ foo() }}
-  </div>
+<template src="./app.html">
 </template>
 
-<script>
-export default {
-  components: {
-  },     
-  data () {
-    return {}
-  },
-  methods: {
-    foo: function() {
-      return 'FOO'
-    }
-  }
-}
-</script>
+<script src="./app.js"></script>
 
 <style>
 .example {

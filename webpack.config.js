@@ -22,7 +22,11 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ]
-      }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)(\?.*$|$)/,
+        loader: 'url-loader?importLoaders=1&limit=100000'
+      },
     ]
   },
   plugins: [
