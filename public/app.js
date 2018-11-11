@@ -56,7 +56,7 @@ export default {
 
         const entry = {
           id: data.meta.id,
-          name: data.meta.pattern,
+          name: (data.meta.start % 100000) + ' ' + data.meta.pattern,
           children: [],
           data: data
         }
