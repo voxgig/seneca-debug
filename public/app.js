@@ -93,13 +93,11 @@ export default {
           const el = vnode && vnode.$el
           
           if(el) {
-            window.foo = el
-
-            if(null == self.term) {
-              el.classList.remove('found-msg')
-            }
-            else if(-1 != item.json.indexOf(self.term)) {
+            if(-1 != item.json.indexOf(self.term)) {
               el.classList.add('found-msg')
+            }
+            else {
+              el.classList.remove('found-msg')
             }
           }
         })

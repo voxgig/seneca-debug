@@ -98,7 +98,16 @@ function debug(options) {
       }
     })
 
-
+      intern.hapi.route({
+        method: 'GET',
+        path: '/config',
+        handler: async function(req,h) {
+          return {
+            port: options.hapi.port
+          }
+        }
+      })
+    
     if(options.test) {
       intern.hapi.route({
         method: 'GET',
