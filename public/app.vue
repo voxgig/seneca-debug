@@ -12,4 +12,7 @@
 .selected-msg > div.v-treeview-node__root {
   border: 1px solid green;
 }
+.found-msg {
+  background-color: #ccf;
+}
 </style>

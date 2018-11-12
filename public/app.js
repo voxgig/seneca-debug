@@ -56,7 +56,7 @@ export default {
 
         const entry = {
           id: data.meta.id,
-          name: (data.meta.start % 100000) + ' ' + data.meta.pattern,
+          name: (data.meta.start % 10000000) + ' ' + data.meta.pattern,
           children: [],
           data: data
         }
@@ -66,6 +66,54 @@ export default {
       }
       else if('out' === data.debug_kind && msgmap[meta.id]) {
         msgmap[meta.id].data = data
+      }
+    },
+
+    search: function(term) {
+      var self = this
+      self.term = (null == term || '' == term) ? null : term.toLowerCase()
+
+      if(!self.search_running) {
+        self.search_running = true
+        run_search()
+        setInterval(run_search,555)
+      }
+      
+      function run_search() {
+        const msgtree = self.$refs.msgtree
+
+        self.walk(function(item) {
+
+          if(!item.json) {
+            item.json = JSON.stringify(item).toLowerCase()
+          }
+
+          const node = msgtree.nodes[item.id]
+          const vnode = node && node.vnode
+          const el = vnode && vnode.$el
+          
+          if(el) {
+            window.foo = el
+
+            if(null == self.term) {
+              el.classList.remove('found-msg')
+            }
+            else if(-1 != item.json.indexOf(self.term)) {
+              el.classList.add('found-msg')
+            }
+          }
+        })
+      }
+    },
+    
+    walk: function(op,item) {
+      if(item) {
+        op(item)
+      }
+      
+      const children = (item && item.children) || this.items
+      for(var i = 0; i < children.length; i++) {
+        this.walk(op,children[i])
       }
     }
   }

@@ -19,64 +19,63 @@ debug.defaults = {
     port: 8899,
     host: 'localhost'
   },
-  wspath: '/debug'
+  wspath: '/debug',
+  store: false,
+  test: false
 }
 
 debug.errors = {}
 
 debug.preload = function preload_debug(plugin) {
-
   intern.error = Errors(this)
   intern.clean = this.util.clean
+}
 
-  
+function debug(options) {
   this.inward(function(ctxt, data) {
     data.debug_kind = 'in'
 
-    // TODO: should be able to turn this off
+    if(options.store) {
+      const meta = data.meta
+      const parent = meta.parents[0] ? meta.parents[0][1] : null
 
-    const meta = data.meta
-    const parent = meta.parents[0] ? meta.parents[0][1] : null
+      const parent_trace = parent ? intern.map[parent] ? intern.map[parent] : intern.trace : intern.trace
 
-    const parent_trace = parent ? intern.map[parent] : intern.trace
+      const trace_node = {
+        meta: meta,
+        msg: data.msg,
+        children: []
+      }
 
-    const trace_node = {
-      meta: meta,
-      msg: data.msg,
-      children: []
+      parent_trace.children.push(trace_node)
+      intern.map[meta.id] = trace_node
     }
-
-    parent_trace.children.push(trace_node)
-    intern.map[meta.id] = trace_node
-
+    
     if(intern.hapi_ready) {
       intern.hapi.publish(intern.wspath, data)
     }
   })
 
+
   this.outward(function(ctxt, data) {
     data.debug_kind = 'out'
+
+    if(options.store) {
+      const trace_node = intern.map[data.meta.id]
+
+      // NOTE: some outward events are virtual from default$ directives
+      // TODO: this needs review in Seneca core
+      if(trace_node) {
+        trace_node.res = data.res
+        trace_node.err = data.err
+      } 
+    }
     
-    const trace_node = intern.map[data.meta.id]
-
-    // NOTE: some outward events are virtual from default$ directives
-    // TODO: this needs review in Seneca core
-    if(trace_node) {
-      trace_node.res = data.res
-      trace_node.err = data.err
-
-      if(intern.hapi_ready) {
-        intern.hapi.publish(intern.wspath, data)
-      }
+    if(intern.hapi_ready) {
+      intern.hapi.publish(intern.wspath, data)
     }
   })
 
-}
-
-function debug(options) {
-
-  // TODO: options seem polluted?
-  // console.log(options)
   
   this.prepare(async function() {
     var seneca = this
@@ -99,13 +98,21 @@ function debug(options) {
       }
     })
 
-    intern.hapi.route({
-      method: 'GET',
-      path: '/test',
-      handler: async function(req,h) {
-        return await seneca.post('b:1,y:3')
-      }
-    })
+
+    if(options.test) {
+      intern.hapi.route({
+        method: 'GET',
+        path: '/test',
+        handler: async function(req,h) {
+          
+          setInterval(function(){
+            seneca.act('b:1,y:3,foo:'+(['red','green','blue'][Math.floor(3*Math.random())]))
+          },1000)
+          
+          return await seneca.post('b:1,y:3')
+        }
+      })
+    }
     
     await intern.hapi.start()
 

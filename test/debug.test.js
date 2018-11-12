@@ -53,7 +53,7 @@ function seneca_instance(fin, testmode) {
   return Seneca()
     .test(fin, testmode)
     .use('promisify')
-    .use(Plugin)
+    .use(Plugin, {store:true})
     .use('seneca-joi')
     .use('entity')
 }

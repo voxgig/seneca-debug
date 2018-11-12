@@ -11,8 +11,8 @@ async function setup() {
     .use('promisify')
     .use('seneca-joi')
     .use('entity')
-    .use('..')
-  
+    .use('..', {test: true})
+
     .message('a:1', async function(msg) {
       return {x:msg.x}
     })

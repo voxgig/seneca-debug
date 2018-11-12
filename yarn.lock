@@ -359,7 +359,7 @@ ajv@^5.2.3, ajv@^5.3.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-ajv@^6.1.0, ajv@^6.5.3:
+ajv@^6.1.0, ajv@^6.5.3, ajv@^6.5.5:
   version "6.5.5"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
   integrity sha512-7q7gtRQDJSyuEHjuVgHoUa2VuemFiCMrfQc9Tc08XTAc4Zj/5U1buQJ0HU6i7fKjXU09SVgSmxa4sLvuvS8Iyg==
@@ -671,9 +671,9 @@ bossy@4.x.x:
     joi "14.x.x"
 
 bounce@1.x.x:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/bounce/-/bounce-1.2.2.tgz#b73fabe05675c5190003978a54a577aa8a3b8ea3"
-  integrity sha512-1LPcXg3fkGVhjdA/P3DcR5cDktKEYtDpruJv9Nhmy36RoYaoxZfC82Zr2JmS3vysDJKqMtP0qJw3/P6iisTASg==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/bounce/-/bounce-1.2.3.tgz#2b286d36eb21d5f08fe672dd8cd37a109baad121"
+  integrity sha512-3G7B8CyBnip5EahCZJjnvQ1HLyArC6P5e+xcolo13BVI9ogFaDOsNMAE7FIWliHtIkYI8/nTRCvCY9tZa3Mu4g==
   dependencies:
     boom "7.x.x"
     hoek "6.x.x"
@@ -2203,11 +2203,11 @@ har-schema@^2.0.0:
   integrity sha1-qUwiJOvKwEeCoNkDVSHyRzW37JI=
 
 har-validator@~5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-5.1.0.tgz#44657f5688a22cfd4b72486e81b3a3fb11742c29"
-  integrity sha512-+qnmNjI4OfH2ipQ9VQOw23bBd/ibtfbVdK2fYbY4acTDqKTW/YDp9McimZdDbG8iV9fZizUqQMD5xvriB146TA==
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-5.1.3.tgz#1ef89ebd3e4996557675eed9893110dc350fa080"
+  integrity sha512-sNvOCzEQNr/qrvJgc3UG/kD4QtlHycrzwS+6mfTrrSq97BvaYcPZZI1ZSqGSPR73Cxn4LKTD4PttRwfU7jWq5g==
   dependencies:
-    ajv "^5.3.0"
+    ajv "^6.5.5"
     har-schema "^2.0.0"
 
 has-ansi@^2.0.0:
@@ -2330,9 +2330,9 @@ hoek@5.x.x:
   integrity sha512-Alr4ZQgoMlnere5FZJsIyfIjORBqZll5POhDsF4q64dPuJR6rNxXdDxtHSQq8OXRurhmx+PWYEE8bXRROY8h0w==
 
 hoek@6.x.x:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/hoek/-/hoek-6.0.2.tgz#a79eac32bdc4fdd6ca056951e3066d84c229d228"
-  integrity sha512-0RGPLkyxpsMJVj/iOCaJaIWFEch988eUicJJpRiQ+Or1CMvBXcoZPlSx9FhreDWw4hxMYy8xgTEdlsYQDTnxWA==
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/hoek/-/hoek-6.0.3.tgz#7884360426d927865a0a1251fc9c59313af5b798"
+  integrity sha512-TU6RyZ/XaQCTWRLrdqZZtZqwxUVr6PDMfi6MlWNURZ7A6czanQqX4pFE1mdOUQR9FdPCsZ0UzL8jI/izZ+eBSQ==
 
 html-minifier@^3.2.3:
   version "3.5.21"
@@ -2785,9 +2785,9 @@ isstream@~0.1.2:
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
 items@2.x.x:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
-  integrity sha1-i9FtnIOxlSneWuoyGsqtp4NkoZg=
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/items/-/items-2.1.2.tgz#0849354595805d586dac98e7e6e85556ea838558"
+  integrity sha512-kezcEqgB97BGeZZYtX/MA8AG410ptURstvnz5RAgyFZ8wQFPMxHY8GpTq+/ZHKT3frSlIthUq7EvLt9xn3TvXg==
 
 joi@10.x.x:
   version "10.6.0"
@@ -2818,9 +2818,9 @@ joi@13.7, joi@13.x.x:
     topo "3.x.x"
 
 joi@14.x.x:
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-14.0.4.tgz#f066f79330f6bd6f3dda243be6d2c211f83a5f9b"
-  integrity sha512-KUXRcinDUMMbtlOk7YLGHQvG73dLyf8bmgE+6sBTkdJbZpeGVGAlPXEHLiQBV7KinD/VLD5OA0EUgoTTfbRAJQ==
+  version "14.0.5"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-14.0.5.tgz#c6942f739a37d581da38ac812f3e0490228b549b"
+  integrity sha512-FGlQ4EjNNPp+v+Hx19VWcG1sgODOpUCQDyvepgSZgZx7ld2Kl4ZzMq/UsqZwvY9IXDYAcJy5oQ1+xOhWZIcc7Q==
   dependencies:
     hoek "6.x.x"
     isemail "3.x.x"
@@ -3358,9 +3358,9 @@ neo-async@^2.5.0:
   integrity sha512-MFh0d/Wa7vkKO3Y3LlacqAEeHK0mckVqzDieUKTT+KGxi+zIpeVsFxymkIiRpbpDziHc290Xr9A1O4Om7otoRA==
 
 nes@9.0:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/nes/-/nes-9.0.1.tgz#e0f9abab84e3ad86e47915bd5226f782eb125cdb"
-  integrity sha512-1j5rBPNw4+RmtZWCT6Hey+FZS25z6mtjZQOy5ZH69cXLflCU46QNt2iA6DumZ6S2S6I+bN5/2br/2XoGeipFWQ==
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/nes/-/nes-9.0.2.tgz#acf61d8c3b70e66070bb428540082ce473caa836"
+  integrity sha512-Ox6WrYNpR/H4Fw91demEaDnsT14aAd9x1gt0N0xxn8CckJwh3J8BHxLGnWvknaq0/0J5q9lH7L1Cl+fvO3yD6g==
   dependencies:
     boom "7.x.x"
     bounce "1.x.x"
@@ -3844,9 +3844,9 @@ pluralize@^7.0.0:
   integrity sha512-ARhBOdzS3e41FbkW/XWrTEtukqqLoK5+Z/4UeDaLuSW+39JPeFgs4gCGqsrJHVZX0fUrx//4OF0K1CUGwlIFow==
 
 podium@3.x.x:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/podium/-/podium-3.1.5.tgz#83584d1d549c06c5b83fc91abc74d77b3c80a261"
-  integrity sha512-+fAPmAj3d5fWKx5oSjQKeBIcl46/qZnGLhzyi/dJ/HzNiOpuxyX/Y4091LiVxZQ4ALdf/LCS7siV6ai5nNLlOg==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/podium/-/podium-3.2.0.tgz#2a7c579ddd5408f412d014c9ffac080c41d83477"
+  integrity sha512-rbwvxwVkI6gRRlxZQ1zUeafrpGxZ7QPHIheinehAvGATvGIPfWRkaTeWedc5P4YjXJXEV8ZbBxPtglNylF9hjw==
   dependencies:
     hoek "6.x.x"
     joi "14.x.x"
@@ -3921,9 +3921,9 @@ prelude-ls@~1.1.2:
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
 prettier@1:
-  version "1.15.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.1.tgz#06c67106afb1b40e74b002353b2079cc7e0e67bf"
-  integrity sha512-4rgV2hyc/5Pk0XHH4VjJWHRgVjgRbpMfLQjREAhHBtyW1UvTFkjJEsueGYNYYZd9mn97K+1qv0EBwm11zoaSgA==
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.2.tgz#d31abe22afa4351efa14c7f8b94b58bb7452205e"
+  integrity sha512-YgPLFFA0CdKL4Eg2IHtUSjzj/BWgszDHiNQAe0VAIBse34148whfdzLagRL+QiKS+YfK5ftB6X4v/MBw8yCoug==
 
 prettier@1.13.7:
   version "1.13.7"
@@ -4447,7 +4447,7 @@ seneca-transport@2.3:
     reconnect-core "1.3"
     wreck "12.5"
 
-"seneca@github:senecajs/seneca":
+"seneca@github:senecajs/seneca#3.8.0-rc2":
   version "3.8.0-rc2"
   resolved "https://codeload.github.com/senecajs/seneca/tar.gz/5ba232c9f4883a51932d7fc3970ed162930b76de"
   dependencies:

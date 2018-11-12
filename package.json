@@ -53,7 +53,7 @@
     "lab": "17",
     "prettier": "1",
     "repo-validator": "github:metsitaba/repo-validator#v0.0.4",
-    "seneca": "github:senecajs/seneca",
+    "seneca": "github:senecajs/seneca#3.8.0-rc2",
     "seneca-entity": "2",
     "seneca-joi": "2",
     "seneca-msg-test": "0",
