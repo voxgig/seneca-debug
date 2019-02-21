@@ -3,7 +3,7 @@ const top = {
 };
 
 const msgmap = {};
-const msgmapd = {};
+const msgmapchildren = {};
 
 export default {
   components: {},
@@ -11,8 +11,7 @@ export default {
     return {
       items: top.items,
       active: [],
-      open: [],
-      selected: null
+      open: []
     };
   },
   created: function() {
@@ -21,45 +20,26 @@ export default {
       self.addmsg(data);
     });
   },
+  computed: {
+    selected: function() {
+      if (!this.active.length) return undefined;
+      const id = this.active[0];
+      return msgmap[id];
+    }
+  },
 
   methods: {
-    opened: function(nodes) {
-      //console.log(nodes.toString());
-
-      const last = nodes[nodes.length - 1];
-      if (last) {
-        const msgtree = this.$refs.msgtree;
-        const prev = this.selected;
-
-        this.selected = msgmapd[last];
-
-        if (this.selected) {
-          if (prev) {
-            const prevnode = msgtree.nodes[prev.id];
-            if (prevnode) {
-              prevnode.isActive = false;
-              if (prevnode.vnode) {
-                prevnode.vnode.isActive = false;
-              }
-            }
-          }
-
-          msgtree.nodes[this.selected.id].isActive = true;
-          msgtree.nodes[this.selected.id].vnode.isActive = true;
-        }
-      }
-    },
     load_children: function(data) {
-      data.children = msgmapd[data.id].children;
+      data.children = msgmapchildren[data.id];
     },
     addmsg: function(data) {
       const meta = data.meta;
       const parent = meta.parents[0] ? meta.parents[0][1] : null;
 
-      if ("in" === data.debug_kind && !msgmapd[meta.id]) {
+      if ("in" === data.debug_kind && !msgmap[meta.id]) {
         const parent_children = parent
-          ? msgmapd[parent]
-            ? msgmapd[parent].children
+          ? msgmapchildren[parent]
+            ? msgmapchildren[parent]
             : top.items
           : top.items;
 
@@ -70,18 +50,14 @@ export default {
           children: []
         };
 
-        const entry_thin = {
-          id: data.meta.id,
-          name: (data.meta.start % 10000000) + " " + data.meta.pattern,
-          children: []
-        };
+        const entry_children = [];
 
-        parent_children.push(entry_thin);
-        msgmap[meta.id] = entry_thin;
-        msgmapd[meta.id] = entry;
-      } else if ("out" === data.debug_kind && msgmapd[meta.id]) {
+        parent_children.push(entry);
+        msgmap[meta.id] = entry;
+        msgmapchildren[meta.id] = entry_children;
+      } else if ("out" === data.debug_kind && msgmap[meta.id]) {
         msgmap[meta.id].name += " " + (meta.end - meta.start) + "ms";
-        msgmapd[meta.id].data = data;
+        msgmap[meta.id].data = data;
       }
     },
 
@@ -108,7 +84,7 @@ export default {
           const el = vnode && vnode.$el;
 
           if (el) {
-            if (-1 != item.json.indexOf(self.term)) {
+            if (self.term && -1 != item.json.indexOf(self.term)) {
               el.classList.add("found-msg");
             } else {
               el.classList.remove("found-msg");
