@@ -5,7 +5,7 @@
         <v-toolbar>
           <v-toolbar-title>Messages</v-toolbar-title>
           <v-spacer/>
-          <v-text-field solo @change="search" type="search" placeholder="search..." />
+          <v-text-field solo v-model="search_txt" type="search" placeholder="search..." />
         </v-toolbar>
 
         <v-layout

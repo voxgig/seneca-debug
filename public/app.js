@@ -4,6 +4,8 @@ const top = {
 
 const msgmap = {};
 const msgmapchildren = {};
+const msgmapdata = {};
+const searchlist = [];
 
 export default {
   components: {},
@@ -11,7 +13,8 @@ export default {
     return {
       items: top.items,
       active: [],
-      open: []
+      open: [],
+      search_txt: ""
     };
   },
   created: function() {
@@ -24,7 +27,16 @@ export default {
     selected: function() {
       if (!this.active.length) return undefined;
       const id = this.active[0];
-      return msgmap[id];
+      return msgmapdata[id];
+    }
+  },
+
+  watch: {
+    "items.length": function() {
+      if (this.search_txt) this.search();
+    },
+    search_txt: function() {
+      this.search();
     }
   },
 
@@ -46,51 +58,50 @@ export default {
         const entry = {
           id: data.meta.id,
           name: (data.meta.start % 10000000) + " " + data.meta.pattern,
-          data: data,
           children: []
         };
 
-        const entry_children = [];
-
         parent_children.push(entry);
         msgmap[meta.id] = entry;
-        msgmapchildren[meta.id] = entry_children;
+        msgmapchildren[meta.id] = [];
       } else if ("out" === data.debug_kind && msgmap[meta.id]) {
         msgmap[meta.id].name += " " + (meta.end - meta.start) + "ms";
-        msgmap[meta.id].data = data;
+        msgmapdata[meta.id] = {
+          id: meta.id,
+          name: msgmap[meta.id].name,
+          data: data
+        };
+        searchlist.push({
+          id: meta.id,
+          text: JSON.stringify(data).toLowerCase(),
+          parent: parent
+        });
       }
     },
 
-    search: function(term) {
+    search: function() {
+      console.log("search");
       var self = this;
-      self.term = null == term || "" == term ? null : term.toLowerCase();
+      self.term = this.search_txt.toLowerCase();
 
-      if (!self.search_running) {
-        self.search_running = true;
-        run_search();
-        setInterval(run_search, 555);
-      }
+      const list = self.$refs.msgtree.nodes;
 
-      function run_search() {
-        const msgtree = self.$refs.msgtree;
+      for (var i = 0; i < searchlist.length; i++) {
+        const item = searchlist[i];
+        const found = self.term && item.text.indexOf(self.term) !== -1;
 
-        self.walk(function(item) {
-          if (!item.json) {
-            item.json = JSON.stringify(item).toLowerCase();
-          }
-
-          const node = msgtree.nodes[item.id];
+        self.walkup(function(item) {
+          const node = list[item.id];
           const vnode = node && node.vnode;
           const el = vnode && vnode.$el;
-
           if (el) {
-            if (self.term && -1 != item.json.indexOf(self.term)) {
+            if (found) {
               el.classList.add("found-msg");
             } else {
               el.classList.remove("found-msg");
             }
           }
-        });
+        }, item);
       }
     },
 
@@ -103,6 +114,14 @@ export default {
       for (var i = 0; i < children.length; i++) {
         this.walk(op, children[i]);
       }
+    },
+    walkup: function(op, item, found) {
+      if (item) {
+        op(item, found);
+      }
+      const parent = item && item.parent;
+      if (!parent) return;
+      this.walkup(op, searchlist[parent], found);
     }
   }
 };
