@@ -54,6 +54,13 @@ function debug(options) {
 
     if (intern.hapi_ready) {
       intern.hapi.publish(intern.wspath, data);
+
+      if (data.meta && data.meta.custom && data.meta.custom.principal) {
+        intern.hapi.publish(
+          "/filter/" + data.meta.custom.principal.user.handle,
+          data
+        );
+      }
     }
   });
 
@@ -73,6 +80,13 @@ function debug(options) {
 
     if (intern.hapi_ready) {
       intern.hapi.publish(intern.wspath, data);
+
+      if (data.meta && data.meta.custom && data.meta.custom.principal) {
+        intern.hapi.publish(
+          "/filter/" + data.meta.custom.principal.user.handle,
+          data
+        );
+      }
     }
   });
 
@@ -85,6 +99,8 @@ function debug(options) {
     await intern.hapi.register(Nes);
 
     intern.hapi.subscription(options.wspath);
+
+    intern.hapi.subscription("/filter/{handle}");
 
     intern.hapi.route({
       method: "GET",

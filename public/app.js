@@ -14,7 +14,8 @@ export default {
       items: top.items,
       active: [],
       open: [],
-      search_txt: ""
+      search_txt: "",
+      filter_txt: ""
     };
   },
   created: function() {
@@ -37,10 +38,16 @@ export default {
     },
     search_txt: function() {
       this.search();
+    },
+    filter_txt: function() {
+      this.$root.$emit("filter", this.filter_txt);
     }
   },
 
   methods: {
+    clear: function() {
+      this.items.splice(0);
+    },
     load_children: function(data) {
       data.children = msgmapchildren[data.id];
     },
@@ -61,7 +68,7 @@ export default {
           children: []
         };
 
-        parent_children.push(entry);
+        parent_children.unshift(entry);
         msgmap[meta.id] = entry;
         msgmapchildren[meta.id] = [];
       } else if ("out" === data.debug_kind && msgmap[meta.id]) {

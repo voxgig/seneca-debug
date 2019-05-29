@@ -26,11 +26,27 @@ function createApp() {
       const start = async () => {
         await client.connect();
 
+        let currentFilter = "/debug";
+
         const handler = (update, flags) => {
           app.$root.$emit("msg", update);
         };
 
-        client.subscribe("/debug", handler);
+        const updateFilter = filter => {
+          client.unsubscribe(currentFilter, handler);
+
+          if (!filter) {
+            currentFilter = "/debug";
+          } else {
+            currentFilter = "/filter/" + filter;
+          }
+
+          client.subscribe(currentFilter, handler);
+        };
+
+        app.$root.$on("filter", updateFilter);
+
+        updateFilter("");
       };
       start();
 
