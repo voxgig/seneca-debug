@@ -2,10 +2,10 @@ const top = {
   items: []
 };
 
-const msgmap = {};
-const msgmapchildren = {};
-const msgmapdata = {};
-const searchlist = [];
+var msgmap = {};
+var msgmapchildren = {};
+var msgmapdata = {};
+var searchlist = [];
 
 export default {
   components: {},
@@ -46,7 +46,11 @@ export default {
 
   methods: {
     clear: function() {
-      this.items.splice(0);
+      searchlist = [];
+      msgmap = {};
+      msgmapchildren = {};
+      msgmapdata = {};
+      this.items.splice(0, this.items.length);
     },
     load_children: function(data) {
       data.children = msgmapchildren[data.id];

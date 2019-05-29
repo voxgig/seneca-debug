@@ -20,8 +20,9 @@
             <v-treeview
               ref="msgtree"
               :active.sync="active"
-              :open.sync="open"
+              :open="open"
               :items="items"
+              
               active-class="selected-msg"
               class="grey lighten-5"
               :load-children="load_children"
