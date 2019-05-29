@@ -18,7 +18,8 @@ debug.defaults = {
   },
   wspath: "/debug",
   store: false,
-  test: false
+  test: false,
+  prod: false
 };
 
 debug.errors = {};
@@ -53,9 +54,15 @@ function debug(options) {
     }
 
     if (intern.hapi_ready) {
-      intern.hapi.publish(intern.wspath, data);
+      if (!options.prod) intern.hapi.publish(intern.wspath, data);
 
-      if (data.meta && data.meta.custom && data.meta.custom.principal) {
+      if (
+        data.meta &&
+        data.meta.custom &&
+        data.meta.custom.principal &&
+        data.meta.custom.principal.user &&
+        data.meta.custom.principal.user.handle
+      ) {
         intern.hapi.publish(
           "/filter/" + data.meta.custom.principal.user.handle,
           data
@@ -79,9 +86,15 @@ function debug(options) {
     }
 
     if (intern.hapi_ready) {
-      intern.hapi.publish(intern.wspath, data);
+      if (!options.prod) intern.hapi.publish(intern.wspath, data);
 
-      if (data.meta && data.meta.custom && data.meta.custom.principal) {
+      if (
+        data.meta &&
+        data.meta.custom &&
+        data.meta.custom.principal &&
+        data.meta.custom.principal.user &&
+        data.meta.custom.principal.user.handle
+      ) {
         intern.hapi.publish(
           "/filter/" + data.meta.custom.principal.user.handle,
           data
