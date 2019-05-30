@@ -22,13 +22,22 @@
               :active.sync="active"
               :open="open"
               :items="items"
-              
               active-class="selected-msg"
               class="grey lighten-5"
               :load-children="load_children"
               transition
               activatable
               >
+              <template v-slot:prepend="{ item, open }">
+                {{ item.num_children }}
+                <v-icon v-if="item.error">
+                    warning
+                </v-icon>
+              </template>
+
+              <template v-slot:append="{ item, open }">
+                {{item.duration}}ms
+              </template>
             </v-treeview>
           </v-flex>
           <v-flex
@@ -56,6 +65,8 @@
 
                 <v-card-text>
                   <h4 class="headline mb-2">result</h4>
+
+                  <div v-if="selected.data.result_length">Result size {{selected.data.result_length}} (not sent for performance)</div>
                   <vue-json-pretty
                     :deep="3"
                     :data="selected.data.res || selected.data.err"

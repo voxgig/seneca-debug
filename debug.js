@@ -6,6 +6,7 @@ const Util = require("util");
 const Hapi = require("hapi");
 const Inert = require("inert");
 const Nes = require("nes");
+const _ = require("lodash");
 
 var Errors = require("./lib/errors");
 
@@ -30,9 +31,15 @@ debug.preload = function preload_debug(plugin) {
 };
 
 function debug(options) {
+  const seneca = this;
+
+  var log_to_console = false;
+  var log_to_console_users = {};
+
   this.inward(function(ctxt, data) {
     data.debug_kind = "in";
 
+    var data_in;
     if (options.store) {
       const meta = data.meta;
       const parent = meta.parents[0] ? meta.parents[0][1] : null;
@@ -56,6 +63,14 @@ function debug(options) {
     if (intern.hapi_ready) {
       if (!options.prod) intern.hapi.publish(intern.wspath, data);
 
+      data_in = JSON.stringify(data);
+
+      var logged = false;
+      if (log_to_console) {
+        logged = true;
+        console.log(data_in);
+      }
+
       if (
         data.meta &&
         data.meta.custom &&
@@ -63,9 +78,39 @@ function debug(options) {
         data.meta.custom.principal.user &&
         data.meta.custom.principal.user.handle
       ) {
+        if (!logged) {
+          for (let u in log_to_console_users) {
+            if (
+              log_to_console_users[u] &&
+              data.meta.custom.principal.user.handle === u
+            )
+              console.log(data_in);
+          }
+        }
+        data_in = JSON.parse(data_in);
+        if (options.prod) {
+          data_in.msg = seneca.util.clean(data_in.msg);
+          data_in.meta = {
+            id: data.meta.id,
+            start: data.meta.start,
+            end: data.meta.end,
+            pattern: data.meta.pattern,
+            plugin: data.meta.plugin,
+            instance: data.meta.instance
+          };
+
+          if (data.meta.parents && data.meta.parents.length > 1) {
+            data_in.meta.parents = null;
+            data_in.meta.parent = data.meta.parents[0][1];
+          } else {
+            data_in.meta.parents = data.meta.parents;
+            data_in.meta.custom = data.meta.custom;
+          }
+        }
+
         intern.hapi.publish(
           "/filter/" + data.meta.custom.principal.user.handle,
-          data
+          data_in
         );
       }
     }
@@ -73,6 +118,8 @@ function debug(options) {
 
   this.outward(function(ctxt, data) {
     data.debug_kind = "out";
+
+    var data_out;
 
     if (options.store) {
       const trace_node = intern.map[data.meta.id];
@@ -88,6 +135,15 @@ function debug(options) {
     if (intern.hapi_ready) {
       if (!options.prod) intern.hapi.publish(intern.wspath, data);
 
+      data_out = JSON.stringify(data);
+
+      var logged = false;
+
+      if (log_to_console) {
+        logged = true;
+        console.log(data_out);
+      }
+
       if (
         data.meta &&
         data.meta.custom &&
@@ -95,9 +151,43 @@ function debug(options) {
         data.meta.custom.principal.user &&
         data.meta.custom.principal.user.handle
       ) {
+        if (!logged) {
+          for (let u in log_to_console_users) {
+            if (
+              log_to_console_users[u] &&
+              data.meta.custom.principal.user.handle === u
+            )
+              console.log(data_out);
+          }
+        }
+        data_out = JSON.parse(data_out);
+        data_out.err = data.meta.err;
+        data_out.error = data.meta.error;
+
+        if (options.prod) {
+          data_out.msg = {};
+          data_out.meta = {
+            id: data.meta.id,
+            start: data.meta.start,
+            end: data.meta.end,
+            pattern: data.meta.pattern,
+            parents: data.meta.parents
+          };
+
+          data_out.err = data.meta.err;
+          data_out.error = data.meta.error;
+
+          if (data.meta.parents && data.meta.parents.length > 1) {
+            data_out.result_length = JSON.stringify(data_out.res).length;
+            data_out.res = null;
+            data_out.meta.parents = null;
+            data_out.meta.parent = data.meta.parents[0][1];
+          }
+        }
+
         intern.hapi.publish(
           "/filter/" + data.meta.custom.principal.user.handle,
-          data
+          data_out
         );
       }
     }
@@ -133,6 +223,35 @@ function debug(options) {
         return {
           port: options.hapi.port
         };
+      }
+    });
+
+    intern.hapi.route({
+      method: "GET",
+      path: "/console",
+      handler: async function(req, h) {
+        log_to_console = true;
+
+        setTimeout(() => {
+          log_to_console = false;
+        }, 60000);
+
+        return "ok";
+      }
+    });
+
+    intern.hapi.route({
+      method: "GET",
+      path: "/console_user/{user}",
+      handler: async function(req, h) {
+        log_to_console_users[req.params.user] = true;
+
+        setTimeout(() => {
+          if (log_to_console_users[req.params.user])
+            delete log_to_console_users[req.params.user];
+        }, 60000);
+
+        return req.params.user;
       }
     });
 

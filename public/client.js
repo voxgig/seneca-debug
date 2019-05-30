@@ -7,7 +7,9 @@ import VueJsonPretty from "vue-json-pretty";
 import "vuetify/dist/vuetify.min.css";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  iconfont: "md"
+});
 Vue.config.productionTip = false;
 
 Vue.component("vue-json-pretty", VueJsonPretty);

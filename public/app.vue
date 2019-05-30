@@ -17,4 +17,5 @@
 .v-treeview-node__content {
   cursor: pointer;
 }
+
 </style>
