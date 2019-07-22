@@ -20,7 +20,12 @@ lab.test('validate', Util.promisify(function(x,fin){PluginValidator(Plugin, modu
 
 
 lab.test('happy', async () => {
+  process.argv.push('--seneca.print.tree')
+
   const si = seneca_instance()
+
+  await si.ready()
+
   si
     .message('a:1', async function(msg) {
       return {x:msg.x}
@@ -43,7 +48,6 @@ lab.test('happy', async () => {
   
   const debug = si.export('debug')
 
-  //console.dir(debug,{depth:null})
   console.log(debug.print())
 })
 

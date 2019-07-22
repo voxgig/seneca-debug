@@ -8,6 +8,8 @@ const Inert = require('inert')
 const Nes = require('nes')
 const _ = require('lodash')
 var Stringify = require('json-stringify-safe')
+var Archy = require('archy')
+
 
 var Errors = require('./lib/errors')
 
@@ -282,6 +284,13 @@ function debug(options) {
     intern.wspath = options.wspath
   })
 
+
+  this.ready(function() {
+    intern.handle_print_tree(this)
+  })
+  
+
+  
   return {
     export: {
       trace: intern.trace,
@@ -320,6 +329,101 @@ const intern = (debug.intern = {
 
     return walk(intern.trace, 0, []).join('\n')
   },
+
+
+  handle_print_tree: function(seneca) {
+    var cmdspec = seneca.argv
+    
+    if (cmdspec && cmdspec.print && cmdspec.print.tree) {
+      // Hack! Complex init means non-deterministic or multiple ready calls,
+      // so just delay tree print by some number of seconds to capture full tree.
+      var delay_seconds = cmdspec.print.tree.all || cmdspec.print.tree
+      if ('number' === typeof delay_seconds) {
+        setTimeout(function() {
+          intern.print_tree(seneca, cmdspec)
+        }, 1000 * delay_seconds)
+      } else {
+        // Print after first ready
+        seneca.ready(function() {
+          intern.print_tree(seneca, cmdspec)
+        })
+      }
+    }
+  },
+
+  print_tree: function(seneca, cmdspec) {
+    var tree = {
+      label: 'Seneca action patterns for instance: ' + seneca.id,
+      nodes: []
+    }
+
+    function insert(nodes, current) {
+      if (nodes.length === 0) return
+
+      for (var i = 0; i < current.nodes.length; i++) {
+        if (nodes[0] === current.nodes[i].label) {
+          return insert(nodes.slice(1), current.nodes[i])
+        }
+      }
+
+      var nn = { label: nodes[0], nodes: [] }
+      current.nodes.push(nn)
+      insert(nodes.slice(1), nn)
+    }
+
+    seneca.list().forEach(function(pat) {
+      var nodes = []
+      var ignore = false
+
+      Object.keys(pat).forEach(function(k) {
+        var v = pat[k]
+        if (
+          (!cmdspec.print.tree.all &&
+           (k === 'role' &&
+            (v === 'seneca' ||
+             v === 'basic' ||
+             v === 'util' ||
+             v === 'entity' ||
+             v === 'web' ||
+             v === 'transport' ||
+             v === 'options' ||
+             v === 'mem-store' ||
+             v === 'seneca'))) ||
+            k === 'init'
+        ) {
+          ignore = true
+        } else {
+          nodes.push(k + ':' + v)
+        }
+        nodes.push(k + ':' + v)
+      })
+
+      if (!ignore) {
+        var meta = seneca.find(pat)
+
+        var metadesc = []
+        while (meta) {
+          metadesc.push(
+            '# ' +
+              (meta.plugin_fullname || '-') +
+              ', ' +
+              meta.id +
+              ', ' +
+              meta.func.name
+          )
+          meta = meta.priormeta
+        }
+
+        nodes.push(metadesc.join('\n'))
+
+        insert(nodes, tree)
+      }
+    })
+
+    /* eslint no-console: 0 */
+    console.log(Archy(tree))
+  },
+
   clean: null,
   spaces:
     '                                                                                                                                                                                                                                                                                                                                                                                                                                   '
