@@ -33,6 +33,7 @@
     "node": ">=8"
   },
   "dependencies": {
+    "archy": "^1.0.0",
     "babel-runtime": "^6.26.0",
     "hapi": "^18.1.0",
     "inert": "^5.1.3",
